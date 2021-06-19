@@ -1,0 +1,63 @@
+﻿@model FilmsCatalog.Models.Film
+
+@inject FilmsCatalog.Services.IUserPermissionsService UserPermissions
+
+@{
+    ViewData["Title"] = "Details";
+    var canEditFilm = UserPermissions.CanEditFilm(this.Model);
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+
+<div class="pb-2">
+    <a asp-action="Index" class="btn btn-outline-danger">Вернуться к списку фильмов</a>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-5 col-sm-12">
+        <img style="width: 340px; height: 510px;" src="@Model.Path" alt="@Html.DisplayNameFor(model => model.Name)">
+    </div>
+    <div class="col" style="width: 5px;">
+
+    </div>        
+    <div class="col-lg-7 col-md-4 col-sm-12">
+        <dl class="row">
+            <dt class="col-sm-12 pl-lg-0">
+                <h2>
+                    @Html.DisplayFor(model => model.Name) (@Html.DisplayFor(model => model.ReleaseYear))
+                    @if (canEditFilm)
+                    {
+                        <a title="Изменить" asp-action="Edit" asp-route-id="@Model.Id"><i class="far fa-edit"></i></a>
+                        <a title="Удалить" asp-action="Delete" asp-route-id="@Model.Id"><i class="far fa-trash-alt"></i></a>
+                        <a title="Сменить постер" asp-action="EditPoster" asp-route-id="@Model.Id"><i class="far fa-image"></i></a>
+                    }
+                </h2>
+            </dt>
+            <dt class="col-sm-12 pr-5 pl-lg-0 pl-md-0 pl-sm-5">
+                Описание:
+            </dt>
+            <dd class="col-sm-12 pl-lg-0 pl-md-0 pl-sm-1">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2 pr-5 pl-lg-0 pl-md-0 pl-sm-5">
+                Режиссер:
+            </dt>
+            <dd class="col-sm-10 pl-lg-5 pl-md-0 pl-sm-1">
+                @Html.DisplayFor(model => model.Producer)
+            </dd>
+            <dt class="col-sm-2 pr-5 pl-lg-0 pl-sm-1">
+                Год:
+            </dt>
+            <dd class="col-sm-10 pl-lg-5 pl-md-0 pl-sm-1">
+                @Html.DisplayFor(model => model.ReleaseYear)
+            </dd>
+            <dt class="col-sm-2 pr-5 pl-lg-0 pl-sm-1">
+                Опубликовал:
+            </dt>
+            <dd class="col-sm-10 pl-lg-5 pl-md-0 pl-sm-5">
+                @Html.DisplayFor(model => model.Creator.FirstName) @Html.DisplayFor(model => model.Creator.LastName)
+            </dd>
+        </dl>
+    </div>
+</div>

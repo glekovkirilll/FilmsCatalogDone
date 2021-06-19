@@ -1,0 +1,62 @@
+﻿@model PagedList.IPagedList<FilmsCatalog.Models.Film>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Каталог</h1>
+
+<div class="row">
+
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6 col-lg-3 mb-2 pb-2">
+            <div class="card" style="width: 17rem;">
+
+
+                <img style="width: 270px; height: 400px;" src="@item.Path" class="card-img-top" alt="...">
+
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    @*<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>*@
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<br />
+<p class="pb-2">Страница <b><u>@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)</u></b> из <b>@Model.PageCount</b></p>
+
+@*@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        @if (Model.PageNumber == 1)
+        {
+            <li class="page-item disabled"><a class="page-link">Предыдущая</a></li>
+        }
+        else
+        {
+            <li class="page-item"><a class="page-link" asp-controller="Films" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Предыдущая</a></li>
+        }
+
+        @for (int i = 0; i < Model.PageCount; i++)
+        {
+            <li class="page-item"><a class="page-link" asp-controller="Films" asp-action="Index" asp-route-page="@(i+1)">@(i+1)</a></li>
+        }
+
+        @if (Model.PageNumber == Model.PageCount)
+        {
+            <li class="page-item disabled"><a class="page-link">Следующая</a></li>
+        }
+        else
+        {
+            <li class="page-item"><a class="page-link" asp-controller="Films" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Следующая</a></li>
+        }
+    </ul>
+</nav>
